@@ -1,0 +1,2 @@
+#!/bin/bash
+sed "s/{{DB_USER}}/$POSTGRES_USER/g; s/{{DB_PASSWORD}}/$POSTGRES_PASSWORD/g; s/{{DB_NAME}}/$POSTGRES_DB/g" /docker-entrypoint-initdb.d/init_db.sql.template | psql -U "$POSTGRES_USER" "$POSTGRES_DB"

@@ -2,9 +2,7 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
-	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -22,21 +20,11 @@ func Connect() {
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_NAME"),
 	)
-
-	var d *gorm.DB
 	var err error
-	// Retry loop for MySQL connection (max 10 attempts)
-	for i := 0; i < 10; i++ {
-		d, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
-		if err == nil {
-			db = d
-			return
-		}
-		log.Printf("MySQL not ready, retrying in 2 seconds (attempt %d): %v", i+1, err)
-		time.Sleep(2 * time.Second)
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic(fmt.Errorf("failed to connect to database: %w", err))
 	}
-	// If max retries reached, panic with the error.
-	panic(fmt.Errorf("failed to connect to database: %w", err))
 }
 
 func GetDB() *gorm.DB {
