@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  app:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_ADDR=redis-server:6379
+      - APP_PORT=:3000
+      - DB_PASS=redis_server
+      - DOMAIN=localhost:3000
+      - name=value
+      - API_QUOTA=3
+    depends_on:
+      - redis-server
+
+
+  redis-server:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    command: redis-server --requirepass redis_server
+    volumes:
+      - redis_data:/data/
+
+  
+volumes:
+  redis_data: {}
