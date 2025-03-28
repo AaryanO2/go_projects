@@ -10,7 +10,11 @@ COPY . .
 # Build a statically-linked binary
 RUN CGO_ENABLED=0 go build -o main main.go
 
-FROM scratch
+FROM alpine
+
+RUN adduser -S -D -h /app appuser
+
+USER appuser
 
 WORKDIR /app
 

@@ -1,15 +1,19 @@
 package helpers
 
 import (
+	"net/url"
 	"os"
 	"strings"
 )
 
-func RemoveDomainError(url string) bool {
-	if url == os.Getenv("DOMAIN") {
-		return false
+func RemoveDomainError(inputURL string) bool {
+	paresedURL, err := url.Parse(inputURL)
+
+	if err!= nil{
+		return paresedURL.Host == os.Getenv("DOMAIN") 
 	}
-	newURL := strings.Replace(url, "http://", "", 1)
+
+	newURL := strings.Replace(inputURL, "http://", "", 1)
 	newURL = strings.Replace(newURL, "https://", "", 1)
 	newURL = strings.Replace(newURL, "www.", "", 1)
 	newURL = strings.Split(newURL, "/")[0]
